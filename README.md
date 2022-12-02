@@ -1,6 +1,6 @@
 # Advent of Code
 
-Solutions for (Advent of Code)[https://adventofcode.com] puzzles
+Solutions for [Advent of Code](https://adventofcode.com) puzzles
 
 ## Links:
 [Author GitHub](https://github.com/Martan03)  
