@@ -1,8 +1,12 @@
 #include <iostream>
 #include <vector>
 
+/// @brief First part of the puzzle
+/// @return crates at the top of the stack
 std::string first_part();
 
+/// @brief Second part of the puzzle
+/// @return crates at the top of the stack
 std::string second_part();
 
 int main()
