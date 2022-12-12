@@ -4,6 +4,8 @@
 
 int first_part();
 
+int second_part();
+
 std::vector<char> get_moves();
 
 bool in_path(std::vector<std::vector<int>> path, std::vector<int> vec);
@@ -14,12 +16,12 @@ std::vector<int> add_vectors(std::vector<int> vec1, std::vector<int> vec2);
 
 std::vector<int> get_shortest(std::vector<int> head, std::vector<int> tail);
 
-int vector_distance(std::vector<int> vec1, std::vector<int> vec2);
+double vector_distance(std::vector<int> vec1, std::vector<int> vec2);
 
 int main()
 {
-    std::cout << "First part: " << first_part() << std::endl;
-    // std::cout << "Second part: " << second_part() << std::endl;
+    //std::cout << "First part: " << first_part() << std::endl;
+    std::cout << "Second part: " << second_part() << std::endl;
 
     return 0;
 }
@@ -30,19 +32,59 @@ int first_part()
     std::vector<std::vector<int>> path;
 
     std::vector<int> head = { 0, 0 }, tail = { 0, 0 };
-
+    path.push_back(tail);
+    
     for (auto &move : moves)
     {
-        add_vectors(head, get_direction(move));
-        add_vectors(tail, get_shortest(head, tail));
+        head = add_vectors(head, get_direction(move));
+
+        if (vector_distance(head, tail) < 2)
+            continue;
+
+        tail = get_shortest(head, tail);
 
         if (in_path(path, tail))
             continue;
 
         path.push_back(tail);
     }
-
+    
     return path.size();
+}
+
+int second_part()
+{
+    std::vector<char> moves = get_moves();
+    std::vector<std::vector<int>> tailHistory;
+
+    std::vector<int> head = { 0, 0 }, tail = { 0, 0 };
+    tailHistory.push_back(tail);
+    
+    for (auto &move : moves)
+    {
+        head = add_vectors(head, get_direction(move));
+
+        if (vector_distance(head, tail) < 2)
+            continue;
+
+        tail = get_shortest(head, tail);
+
+        tailHistory.push_back(tail);
+    }
+    
+    int count = 0;
+    bool contained;
+
+    for (int i = 0; i < tailHistory.size() - 10; ++i)
+    {
+        contained = false;
+        for (int j = 0; j < i; ++j)
+            if (tailHistory.at(i) == tailHistory.at(j))
+                contained = true;
+        count += contained;
+    }
+
+    return count;
 }
 
 std::vector<char> get_moves()
@@ -86,9 +128,9 @@ std::vector<int> get_direction(char dir)
     }
 }
 
-std::vector<int> add_tuples(std::vector<int> vec1, std::vector<int> vec2)
+std::vector<int> add_vectors(std::vector<int> vec1, std::vector<int> vec2)
 {
-    return std::vector<int>(vec1[0] + vec2[0], vec1[1] + vec2[1]);
+    return { vec1[0] + vec2[0], vec1[1] + vec2[1] };
 }
 
 std::vector<int> get_shortest(std::vector<int> head, std::vector<int> tail)
@@ -110,7 +152,7 @@ std::vector<int> get_shortest(std::vector<int> head, std::vector<int> tail)
     return moves[min];
 }
 
-int tuple_distance(std::vector<int> vec1, std::vector<int> vec2)
+double vector_distance(std::vector<int> vec1, std::vector<int> vec2)
 {
     return sqrt(pow(vec1[0] - vec2[0], 2) + pow(vec1[1] - vec2[1], 2));
 }
