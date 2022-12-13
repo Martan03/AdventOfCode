@@ -55,36 +55,28 @@ int first_part()
 int second_part()
 {
     std::vector<char> moves = get_moves();
-    std::vector<std::vector<int>> tailHistory;
-
-    std::vector<int> head = { 0, 0 }, tail = { 0, 0 };
-    tailHistory.push_back(tail);
+    std::vector<std::vector<int>> rope (10, {0, 0});
+    std::vector<std::vector<int>> path;
     
     for (auto &move : moves)
     {
-        head = add_vectors(head, get_direction(move));
+        rope.at(0) = add_vectors(rope.at(0), get_direction(move));
 
-        if (vector_distance(head, tail) < 2)
+        for (int i = 1; i < rope.size(); ++i)
+        {
+            if (vector_distance(rope.at(i - 1), rope.at(i)) < 2)
+                continue;
+
+            rope.at(i) = get_shortest(rope.at(i - 1), rope.at(i));
+        }
+
+        if (in_path(path, rope.at(rope.size() - 1)))
             continue;
 
-        tail = get_shortest(head, tail);
-
-        tailHistory.push_back(tail);
-    }
-    
-    int count = 0;
-    bool contained;
-
-    for (int i = 0; i < tailHistory.size() - 10; ++i)
-    {
-        contained = false;
-        for (int j = 0; j < i; ++j)
-            if (tailHistory.at(i) == tailHistory.at(j))
-                contained = true;
-        count += contained;
+        path.push_back(rope.at(rope.size() - 1));
     }
 
-    return count;
+    return path.size();
 }
 
 std::vector<char> get_moves()
