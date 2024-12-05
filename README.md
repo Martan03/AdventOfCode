@@ -11,4 +11,3 @@ with in the past. 2022 is done with C++ and 2024 with GO.
 - **Author:** [Martan03](https://github.com/Martan03)
 - **GitHub repository:** [AdventOfCode](https://github.com/Martan03/AdventOfCode)
 - **Author website:** [martan03.github.io](https://martan03.github.io)
-
