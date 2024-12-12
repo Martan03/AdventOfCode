@@ -13,10 +13,14 @@ func main() {
 	stones, err := readStones("input.txt")
 	if err != nil {
 		log.Fatalln("Error:", err)
+		return
 	}
 
-	total := applyBlinks(stones, 75)
-	fmt.Println("Total:", total)
+	total := applyBlinks(stones, 25)
+	fmt.Println("Total 25:", total)
+
+	total = applyBlinks(stones, 75)
+	fmt.Println("Total 75:", total)
 }
 
 func readStones(filename string) ([]int, error) {
