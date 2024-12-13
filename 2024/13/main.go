@@ -75,28 +75,23 @@ func tokensToWin(machines []Machine) (int, int) {
 	return tokens1, tokens2
 }
 
-func findCheapest(machine Machine) int {
-	ay := machine.buttonB.x * machine.buttonA.y
-	a := machine.price.x * machine.buttonA.y
-	by := machine.buttonB.y * (-machine.buttonA.x)
-	b := machine.price.y * (-machine.buttonA.x)
-
-	y := ay + by
-	res := a + b
+func findCheapest(m Machine) int {
+	y := m.buttonB.x*m.buttonA.y - m.buttonB.y*m.buttonA.x
+	res := m.price.x*m.buttonA.y - m.price.y*m.buttonA.x
 
 	if res%y != 0 {
 		return 0
 	}
-	res = res / y
+	y = res / y
 
-	x := machine.price.x - (machine.buttonB.x * res)
-	if x%machine.buttonA.x != 0 {
+	x := m.price.x - (m.buttonB.x * y)
+	if x%m.buttonA.x != 0 {
 		return 0
 	}
-	x /= machine.buttonA.x
+	x /= m.buttonA.x
 
-	if x < 0 || res < 0 {
+	if x < 0 || y < 0 {
 		return 0
 	}
-	return x*3 + res
+	return x*3 + y
 }
