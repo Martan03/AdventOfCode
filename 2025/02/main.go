@@ -19,37 +19,32 @@ func main() {
 		return
 	}
 
-	fmt.Println("Part1:", part1(ranges))
-	fmt.Println("Part2:", part2(ranges))
+	part1, part2 := sillyCnt(ranges)
+	fmt.Println("Part1:", part1)
+	fmt.Println("Part2:", part2)
 }
 
-func part1(ranges []Range) int {
-	silly := 0
+func sillyCnt(ranges []Range) (int, int) {
+	silly1 := 0
+	silly2 := 0
 	for _, r := range ranges {
 		for n := r.start; n <= r.end; n++ {
 			if isSilly(n, 2) {
-				silly += n
+				silly1 += n
+				continue
 			}
-		}
-	}
-	return silly
-}
 
-func part2(ranges []Range) int {
-	silly := 0
-	for _, r := range ranges {
-		for n := r.start; n <= r.end; n++ {
-			d := 2
-			for i := 1; i <= n; i *= 10 {
+			d := 3
+			for i := 100; i <= n; i *= 10 {
 				if isSilly(n, d) {
-					silly += n
+					silly2 += n
 					break
 				}
 				d++
 			}
 		}
 	}
-	return silly
+	return silly1, silly1 + silly2
 }
 
 func isSilly(num int, div int) bool {
