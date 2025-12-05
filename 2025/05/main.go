@@ -21,23 +21,62 @@ func main() {
 	}
 
 	fmt.Println("Part1:", part1(ranges, ids))
+	fmt.Println("Part2:", part2(ranges))
 }
 
 func part1(ranges []Range, ids []int) int {
 	fresh := 0
 	for _, id := range ids {
-		valid := false
 		for _, r := range ranges {
 			if r.start <= id && id <= r.end {
-				valid = true
+				fresh++
 				break
 			}
 		}
-		if valid {
-			fresh++
-		}
 	}
 	return fresh
+}
+
+func part2(ranges []Range) int {
+	change := true
+	for change {
+		ranges, change = mergeRanges(ranges)
+	}
+
+	total := 0
+	for _, r := range ranges {
+		total += r.end - r.start + 1
+	}
+	return total
+}
+
+func mergeRanges(ranges []Range) ([]Range, bool) {
+	var jranges []Range
+	change := false
+	for _, cr := range ranges {
+		found := false
+		for i := 0; i < len(jranges); i++ {
+			found = true
+			if jranges[i].start <= cr.start && cr.end <= jranges[i].end {
+				break
+			}
+
+			if (cr.start <= jranges[i].end && jranges[i].start <= cr.end) ||
+				(jranges[i].start <= cr.end && cr.start <= jranges[i].start) {
+				change = true
+				jranges[i].start = min(jranges[i].start, cr.start)
+				jranges[i].end = max(jranges[i].end, cr.end)
+				break
+			}
+
+			found = false
+		}
+
+		if !found {
+			jranges = append(jranges, cr)
+		}
+	}
+	return jranges, change
 }
 
 func readInput(filename string) ([]Range, []int, error) {
